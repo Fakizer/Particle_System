@@ -6,8 +6,7 @@ NAME = ps
 # inc_dir = ./includes/ $(lib_dir)glfw/include/
 
 SRC_PATH = ./sources/
-SRC_SUB_PATH = 
-# GLFW_manager/
+SRC_SUB_PATH = OGL_manager/
 OBJ_PATH = ./objects/
 LIB_PATH = ./library/
 INC_PATH = ./includes/ \
@@ -22,7 +21,7 @@ GCC_FLGS = -pedantic -g3
 CPP_FLGS += -Wno-c++11-extensions
 GCC_LIBS = -lglfw3 -lGLEW -framework AppKit -framework OpenGL -framework OpenCL -framework GLUT -framework IOKit -framework CoreVideo
 
-SYSCONF_LINK = g++
+SYSCONF_LINK = g++ -std=c++11
 LDFLAGS      = -O3 
 LIB_NAME 	= glfw/src/ glew/
 INC 		= $(addprefix -I,$(INC_PATH) $(addsuffix $(SRC_SUB_PATH), ./includes/))
@@ -53,8 +52,8 @@ $(NAME) : obj_dir $(object)
 
 obj_dir:
 		mkdir $(OBJ_PATH)
-		# mkdir $(object_sub_path)
-		@echo $(object)
+		mkdir $(object_sub_path)
+		@echo 
 
 $(object_sub_path)%.o: $(sources_sub_path)%.cpp
 		$(SYSCONF_LINK) $(GCC_FLGS) $(CPP_FLGS) -c $< -o $@ $(INC)
