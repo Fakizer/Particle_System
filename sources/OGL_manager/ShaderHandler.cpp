@@ -1,17 +1,21 @@
 #include "ShaderHandler.hpp"
 
-Shader::Shader() {}
+ShaderHandler::ShaderHandler() {}
 
 ShaderHandler::ShaderHandler(const std::vector<Shader *> & shaders) {
     GLint Result = GL_FALSE;
     int InfoLogLength;
 
     // Создаем шейдерную программу и привязываем шейдеры к ней
-    fprintf(stdout, "Создаем шейдерную программу и привязываем шейдеры к нейn");
+    fprintf(stdout, "Создаем шейдерную программу и привязываем шейдеры к ней\n");
+
     program_id = glCreateProgram();
-    glAttachShader(program_id, shaders[0]->shader_id);
-    glAttachShader(program_id, shaders[1]->shader_id);
+    for (const Shader * shader : shaders)
+        glAttachShader(program_id, shader->shader_id);
     glLinkProgram(program_id);
+    glValidateProgram(program_id);
+    for (const Shader * shader : shaders)
+		glDetachShader(program_id, shader->shader_id);
 
     // Проверяем шейдерную программу
     glGetProgramiv(program_id, GL_LINK_STATUS, &Result);

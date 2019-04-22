@@ -21,11 +21,11 @@ void	Shader::parse()
     }
 }
 
-void    Shader::compile() {
+void    Shader::compile() const {
     GLint Result = GL_FALSE;
     int InfoLogLength;
 
-    printf("Компиляция шейдера: %sn", path.c_str());
+    printf("Компиляция шейдера: %s\n", path.c_str());
     char const * VertexSourcePointer = shader_code.c_str();
     glShaderSource(shader_id, 1, &VertexSourcePointer , NULL);
     glCompileShader(shader_id);
@@ -35,7 +35,7 @@ void    Shader::compile() {
     if ( InfoLogLength > 0 ){
       std::vector<char> ShaderErrorMessage(InfoLogLength+1);
       glGetShaderInfoLog(shader_id, InfoLogLength, NULL, &ShaderErrorMessage[0]);
-      fprintf(stdout, "%sn", &ShaderErrorMessage[0]);
+      fprintf(stdout, "%s\n", &ShaderErrorMessage[0]);
     }
 }
 

@@ -5,6 +5,7 @@
 int main(void) {
 
     OGL_manager     glman;
+    OCL_manager     clman;
 
     glman.rend_img_win();
 

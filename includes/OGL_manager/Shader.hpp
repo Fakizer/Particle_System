@@ -17,7 +17,7 @@ public:
     ~Shader();
 
     void	parse();
-    void    compile();
+    void    compile() const ;
 
     GLenum          type;
     std::string     path;
@@ -25,10 +25,10 @@ public:
     std::string     shader_code;
 
 
-    GLuint			part_vbos;
-    GLuint			part_vaos;
-    GLuint			gp_vbos;
-    GLuint			gp_vaos;
+    // GLuint			part_vbos;
+    // GLuint			part_vaos;
+    // GLuint			gp_vbos;
+    // GLuint			gp_vaos;
 };
 
 #endif

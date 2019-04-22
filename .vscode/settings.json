@@ -51,6 +51,8 @@
         "__split_buffer": "cpp",
         "__tree": "cpp",
         "map": "cpp",
-        "vector": "cpp"
+        "vector": "cpp",
+        "fstream": "cpp",
+        "sstream": "cpp"
     }
 }

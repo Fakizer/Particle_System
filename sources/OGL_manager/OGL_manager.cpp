@@ -1,5 +1,4 @@
 #include "OGL_manager.hpp"
-#include <vector>
 
 OGL_manager::OGL_manager() : window(), keyboard(window) {
     if (!initGLFW())
@@ -13,6 +12,7 @@ OGL_manager::OGL_manager() : window(), keyboard(window) {
 
     glfwSetKeyCallback(window.win, keyboard.key_callback);
     createPrograms();
+    createVO();
 }
 
 bool    OGL_manager::initGLFW() {
@@ -53,22 +53,29 @@ bool    OGL_manager::initGlew() {
 
 void    OGL_manager::createPrograms() {
 
-    std::vector<int> zzz {1, 2, 3, 4};
-    std::vector<std::string> words1 {"the", "frogurt", "is", "also", "cursed"};
+    Shader p_v(GL_VERTEX_SHADER, "shader/particle_vertex.glsl");
+    Shader p_f(GL_FRAGMENT_SHADER, "shader/particle_fragment.glsl");
+    programs["particle"] = new ShaderHandler({&p_v, &p_f});
 
-    programs["particle"] = new ShaderHandler({
-        &Shader(GL_VERTEX_SHADER, "shader/particle_vertex.glsl"),
-        &Shader(GL_FRAGMENT_SHADER, "shader/particle_fragment.glsl")
-    });
+    Shader gp_v(GL_VERTEX_SHADER, "shader/gp_vertex.glsl");
+    Shader gp_f(GL_FRAGMENT_SHADER, "shader/gp_fragment.glsl");
+    programs["gp"] = new ShaderHandler({&gp_v, &gp_f});
+}
 
-    programs["gp"] = new ShaderHandler({
-        &Shader(GL_VERTEX_SHADER, "shader/gp_vertex.glsl"),
-        &Shader(GL_FRAGMENT_SHADER, "shader/gp_fragment.glsl")
-    });
+void    OGL_manager::createVO() {
+    GLuint	vbos[2];
+	GLuint	vaos[2];
+
+	glGenBuffers(2, vbos);
+	vbo.push_back(vbos[0]);
+    vbo.push_back(vbos[1]);
+
+	glGenVertexArrays(2, vaos);
+	vao.push_back(vaos[0]);
+    vao.push_back(vaos[1]);
 }
 
 void    OGL_manager::rend_img_win() {
-    std::cout << (window.win == NULL) << std::endl;
     while (!glfwWindowShouldClose(window.win))
 	{
 		glfwPollEvents();

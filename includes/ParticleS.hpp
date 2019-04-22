@@ -18,6 +18,7 @@
 #define MAX_SOURCE_SIZE 1000
 
 #include "OGL_manager.hpp"
+#include "OCL_manager.hpp"
 
 
 #endif

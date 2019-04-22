@@ -3,10 +3,10 @@
 
 #include "Shader.hpp"
 
-class ShaderHandler
-{
+class ShaderHandler {
+
 private:
-    std::pair<Shader, Shader>  shaders;
+        
 public:
     ShaderHandler();
     ShaderHandler(const std::vector<Shader *> & shaders);
