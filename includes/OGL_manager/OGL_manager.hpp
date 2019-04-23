@@ -24,27 +24,32 @@ private:
 
 
     Keyboard    keyboard;
-    Window      window;
 
-    std::function<void(void *)>		rend_func = nullptr;
-    std::map<std::string, ShaderHandler *>	programs;
 	std::vector<GLuint>						ubos;
 	
-    GLuint			part_vbos;
-    GLuint			part_vaos;
-    GLuint			gp_vbos;
-    GLuint			gp_vaos;
+    // GLuint			part_vbos;
+    // GLuint			part_vaos;
+    // GLuint			gp_vbos;
+    // GLuint			gp_vaos;
 
-    std::vector<GLuint>     vbo; // 0 - particle 1 - gp
-    std::vector<GLuint>     vao;
 
 public:
     OGL_manager();
     ~OGL_manager();
-    
-    void    rend_img_win();
 
+    Window      window;
+    Window      getWindow() const;
+    
+    void    rend_img_win(void * prog);
+
+    std::function<void(void *)>		rend_func = nullptr;
+
+    std::map<std::string, ShaderHandler *>	programs;
+
+    std::vector<GLuint>     vbo; // 0 - particle 1 - gp
+    std::vector<GLuint>     vao;
 };
 
+std::ostream &		operator<<(std::ostream & os, const OGL_manager & gl);
 
 #endif

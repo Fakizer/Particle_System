@@ -6,8 +6,16 @@ int main(void) {
 
     OGL_manager     glman;
     OCL_manager     clman;
+    GravityManager  gm;
 
-    glman.rend_img_win();
+    std::cout << glman << std::endl;
+    std::cout << clman << std::endl;
+
+    ParticleS & pat = ParticleS::instance(&glman, &clman, &gm);
+
+    FPS_manager::start();
+
+    glman.rend_img_win(&pat);
 
     return (0);
 }

@@ -75,16 +75,30 @@ void    OGL_manager::createVO() {
     vao.push_back(vaos[1]);
 }
 
-void    OGL_manager::rend_img_win() {
+void    OGL_manager::rend_img_win(void * prog) {
     while (!glfwWindowShouldClose(window.win))
 	{
-		glfwPollEvents();
-		glClearColor(0.09f, 0.08f, 0.15f, 1.0f);
-	    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        if (prog != nullptr)
+            rend_func(prog);
+		// glClearColor(0.09f, 0.08f, 0.15f, 1.0f);
+	    // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glfwSwapBuffers(window.win);
+		glfwPollEvents();
 	}  
 }
 
+Window      OGL_manager::getWindow() const {
+    return this->window;
+}
+
+
 OGL_manager::~OGL_manager() {
 	glfwTerminate();
+}
+
+std::ostream &		operator<<(std::ostream & os, const OGL_manager & gl)
+{
+	os << glGetString(GL_VERSION);
+
+	return os;
 }

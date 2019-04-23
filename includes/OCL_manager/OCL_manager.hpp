@@ -34,19 +34,15 @@ private:
 
     cl::Platform                                platform;
     cl::Device                                  device;
-    cl::Context				                    context;
 	cl::Program::Sources	                    sources;
+
+public:
+    cl::Context				                    context;
+    cl::Program                                 program;
+	std::vector<cl::Memory>	                    vbos;
 	cl::CommandQueue		                    queue;
 
 
-    cl_platform_id                              platform_id;
-    cl_device_id                                device_id;
-    cl_command_queue                            command_queue;
-    std::vector<std::string>                    vect_sourc;
-    std::vector<cl_program>                     programs;
-    std::vector<cl_kernel>                      kernels;
-
-public:
     OCL_manager();
     ~OCL_manager();
     cl::Platform	    getPlatform(const std::string & defaultName);
@@ -60,6 +56,13 @@ public:
     void    init_cl(const std::string & defPlatName, const std::string & defDevName);
     void    addKernelFiles(const std::string source);
     void    buildKernelProgram();
+
+    cl::Platform        getPlatform() const;
+    cl::Device             getDevice() const;
+    cl::CommandQueue        getQueue();
 };
+
+std::ostream &		operator<<(std::ostream & os, const OCL_manager & cl);
+
 
 #endif

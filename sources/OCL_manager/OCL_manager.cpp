@@ -23,7 +23,6 @@ void        OCL_manager::init_cl(const std::string & defPlatName, const std::str
       0
     };
 
-
     try
 	{
 		context = cl::Context(device, properties);
@@ -156,37 +155,55 @@ bool		OCL_manager::isAnswerCorrect(const std::vector<std::string> & choices, con
 
 void        OCL_manager::addKernelFiles(const std::string path) {
 
-    std::string kernel_code;
+    std::ifstream		file(path.c_str(), std::ios::in);
+	std::stringstream	ss;
 
-    std::ifstream KernelStream(path.c_str(), std::ios::in);
-    if(KernelStream.is_open())
-    {
-        std::stringstream sstr;
-        sstr << KernelStream.rdbuf();
-        kernel_code = sstr.str();
-        KernelStream.close();
-    }
+	if (!file.good())
+		printf("The script file \"%s\" cannot be opened.\n", path.c_str());
 
-    vect_sourc.push_back(kernel_code);
+	ss << file.rdbuf();
+	std::string code = ss.str();
+	sources.push_back({ strdup(code.c_str()), code.size() });
+
 }
 
 void    OCL_manager::buildKernelProgram() {
-    size_t source_size = 0;
-    cl_int ret;
-    for (int i = 0; i < vect_sourc.size(); i++) {
-        source_size = 0;
-        const char *source_str = (const char*)malloc(sizeof(char) * vect_sourc[i].size());
-        source_str = vect_sourc[i].c_str();
-        source_size = vect_sourc[i].size();
-    }
 
+    program = cl::Program(context, sources);
 
-    std::cout << std::endl;
+	try
+	{
+		program.build({ device });
+	}
+	catch (const cl::Error & e)
+	{
+		(void)e;
+		printf("%s\n", program.getBuildInfo<CL_PROGRAM_BUILD_LOG>(device).c_str());
+	}
+}
 
-/* создать кернел */
-    // kernel = clCreateKernel(program, "test", &ret);
+cl::Platform		OCL_manager::getPlatform() const {
+	return this->platform;
+}
 
-    // std::cout << ret << std::endl;
+cl::Device		OCL_manager::getDevice() const {
+	return this->device;
+}
+
+cl::CommandQueue		OCL_manager::getQueue() {
+	return this->queue;
+}
+
+std::ostream &		operator<<(std::ostream & os, const OCL_manager & cl)
+{
+	os
+		<< "Using platform "
+		<< cl.getPlatform().getInfo<CL_PLATFORM_NAME>()
+		<< std::endl
+		<< "Using device "
+		<< cl.getDevice().getInfo<CL_DEVICE_NAME>();
+
+	return os;
 }
 
 OCL_manager::~OCL_manager() {}

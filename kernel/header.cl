@@ -5,4 +5,4 @@ typedef struct
 	float4	velocity;
 }			Particle;
 
-typedef float4	GravityPoint;
+typedef float4	Point;

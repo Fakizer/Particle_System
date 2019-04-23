@@ -7,11 +7,14 @@ NAME = ps
 
 SRC_PATH := ./sources/
 SRC_SUB_PATH :=	OCL_manager/ \
-				OGL_manager/
+				OGL_manager/ \
+				GravityManager/ \
+				Particle/
 OBJ_PATH := ./objects/
 LIB_PATH := ./library/
 INC_PATH := ./includes/ \
 			$(LIB_PATH)glfw/include/ \
+			$(LIB_PATH)glm/ \
 			# ./includes/glad/ \
 			# $(LIB_PATH)glad/include/ \
 			# $(LIB_PATH)glfw/deps/ \
@@ -20,11 +23,11 @@ INC_PATH := ./includes/ \
 GCC_FLGS = -pedantic -g3 -g
 # -Werror -Wextra -Wall
 CPP_FLGS += -Wno-c++11-extensions
-GCC_LIBS = -lglfw3 -lGLEW -framework AppKit -framework OpenGL -framework OpenCL -framework GLUT -framework IOKit -framework CoreVideo
+GCC_LIBS = -lglfw3 -lGLEW -lglm -framework AppKit -framework OpenGL -framework OpenCL -framework GLUT -framework IOKit -framework CoreVideo
 
 SYSCONF_LINK = g++ -std=c++11
 LDFLAGS      = -O3 
-LIB_NAME 	= glfw/src/ glew/
+LIB_NAME 	= glfw/src/ glew/ glm/
 INC 		:= $(addprefix -I,$(INC_PATH) $(addprefix ./includes/, $(SRC_SUB_PATH)))
 LIB 		:= $(addprefix -L$(LIB_PATH),$(LIB_NAME))
 

@@ -13,7 +13,7 @@ ShaderHandler::ShaderHandler(const std::vector<Shader *> & shaders) {
     for (const Shader * shader : shaders)
         glAttachShader(program_id, shader->shader_id);
     glLinkProgram(program_id);
-    glValidateProgram(program_id);
+    // glValidateProgram(program_id);
     for (const Shader * shader : shaders)
 		glDetachShader(program_id, shader->shader_id);
 
@@ -40,3 +40,12 @@ ShaderHandler::~ShaderHandler() {
 void	ShaderHandler::freeGLprog() const {
 	glUseProgram(0);
 }
+
+void    ShaderHandler::prog_enable() const {
+    glUseProgram(program_id);
+}
+
+void	ShaderHandler::prog_disable() const {
+	glUseProgram(0);
+}
+

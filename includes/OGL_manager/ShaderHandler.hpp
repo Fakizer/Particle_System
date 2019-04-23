@@ -14,6 +14,8 @@ public:
 
     void	freeGLprog() const;
 
+    void    prog_enable() const;
+    void    prog_disable() const ;
 
 
     GLuint      program_id = 0;
