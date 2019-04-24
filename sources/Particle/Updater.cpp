@@ -55,5 +55,5 @@ void		Updater::updateWindowTitle(const ParticleS & ps)
 		return;
 
 	sprintf(title, "%i fps", static_cast<int>(fps));
-	glfwSetWindowTitle(ps.glman.getWindow().win, title);
+	glfwSetWindowTitle(ps.glman.window.win, title);
 }

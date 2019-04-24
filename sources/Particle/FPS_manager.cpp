@@ -7,11 +7,20 @@
 float								FPS_manager::fps = 0;
 size_t								FPS_manager::timeCount = 0;
 std::vector<FPS_manager::timePoint>	FPS_manager::times;
+clock_t 							FPS_manager::beginFrame; 
+clock_t								FPS_manager::endFrame;
+clock_t 							FPS_manager::deltaTime = 0;
+// clock_t 							FPS_manager::fps = 0;
+double  							FPS_manager::frameRate = 30;
+double  							FPS_manager::averageFrameTimeMilliseconds = 33.333;
+unsigned int 						FPS_manager::frames = 0;
 
 void		FPS_manager::start()
 {
 	times.resize(FPS_MAX_TIME_COUNT);
 	timeCount = 0;
+
+	beginFrame = clock();
 }
 
 void		FPS_manager::update()
@@ -32,6 +41,7 @@ void		FPS_manager::update()
 		keyTimes.oldest2 = keyTimes.oldest3;
 	}
 
+	// setterFPS();
 	updateCounter(keyTimes);
 }
 
@@ -79,4 +89,31 @@ void					FPS_manager::updateCounter(const KeyTimes & keyTimes)
 	std::chrono::duration<float, std::milli>	duration = times[keyTimes.youngest] - times[keyTimes.oldest];
 
 	fps = timeCount / static_cast<float>(duration.count()) * 1000;
+}
+
+void					FPS_manager::setterFPS() {	
+	endFrame = clock();
+	deltaTime += endFrame - beginFrame;
+    frames++;
+	// printf("| %lu | %lu | %lu | %d |\n", beginFrame, endFrame, deltaTime, frames);
+
+    //if you really want FPS
+    if( clockToMilliseconds(deltaTime)>=1.0) { //every second
+        frameRate = (double)frames*0.5 +  frameRate*0.5; //more stable
+		fps = (float)frames;
+        frames = 0;
+        deltaTime = 0;
+        averageFrameTimeMilliseconds  = 1000.0/(frameRate==0?0.001:frameRate);
+		printf("%f\n", fps);
+        // if(vsync)
+        //     std::cout<<"FrameTime was:"<<averageFrameTimeMilliseconds<<std::endl;
+        // else
+        //    std::cout<<"CPU time was:"<<averageFrameTimeMilliseconds<<std::endl;
+    }
+	beginFrame = endFrame;
+}
+
+double 					FPS_manager::clockToMilliseconds(clock_t ticks) {
+    // units/(units/time) => time (seconds) * 1000 = milliseconds
+    return (ticks/(double)CLOCKS_PER_SEC)*10.0;
 }

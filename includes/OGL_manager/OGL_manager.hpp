@@ -23,7 +23,6 @@ private:
     void    setPartBuff();
 
 
-    Keyboard    keyboard;
 
 	std::vector<GLuint>						ubos;
 	
@@ -37,8 +36,8 @@ public:
     OGL_manager();
     ~OGL_manager();
 
+    Keyboard    keyboard;
     Window      window;
-    Window      getWindow() const;
     
     void    rend_img_win(void * prog);
 

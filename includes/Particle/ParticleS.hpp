@@ -32,8 +32,6 @@ class ParticleS
 {
 private:
 
-
-
     void        setCLbuffers();
     void        setupPartBuffer();
     void        setupGPBuffer();
@@ -49,7 +47,7 @@ private:
 
 public:
 
-    static ParticleS &	 instance(OGL_manager * glman_in, OCL_manager * clman_in, GravityManager * gm_in);
+    static ParticleS &	 instance(OGL_manager * glman_in = nullptr, OCL_manager * clman_in = nullptr, GravityManager * gm_in = nullptr);
 
     void        render();
     void        changePS();
@@ -59,7 +57,7 @@ public:
     GravityManager & gm;
     Camera          camera;
 	cl_uint				entries_count;
-
+    cl::Kernel         kernel;
 
 };
 

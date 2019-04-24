@@ -1,6 +1,6 @@
 #include "OGL_manager.hpp"
 
-OGL_manager::OGL_manager() : window(), keyboard(window) {
+OGL_manager::OGL_manager() : window() {
     if (!initGLFW())
         exit(0);
 
@@ -85,10 +85,6 @@ void    OGL_manager::rend_img_win(void * prog) {
         glfwSwapBuffers(window.win);
 		glfwPollEvents();
 	}  
-}
-
-Window      OGL_manager::getWindow() const {
-    return this->window;
 }
 
 

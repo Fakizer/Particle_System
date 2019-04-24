@@ -3,8 +3,9 @@
 
 #include <chrono>
 #include <vector>
+#include <ctime>
 
-#define FPS_MAX_TIME_COUNT	60
+#define FPS_MAX_TIME_COUNT	120
 
 class FPS_manager
 {
@@ -24,6 +25,12 @@ public:
 
 	static float	fps;
 
+	static clock_t beginFrame, endFrame, deltaTime;
+	static double		frameRate;
+	static double		averageFrameTimeMilliseconds;
+
+	static unsigned int frames;
+	// static clock_t fps;
 	static void		start();
 	static void		update();
 
@@ -34,5 +41,7 @@ protected:
 	static timePoint	now();
 	static KeyTimes		getKeyTimes();
 	static void			updateCounter(const KeyTimes & keyTimes);
+	static void			setterFPS();
+	static double		clockToMilliseconds(clock_t ticks);
 };
 

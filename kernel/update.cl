@@ -26,8 +26,9 @@ float3			get_gravitational_velocity(global Particle * particle, global Point * p
 	{
 		point = points + i;
 
-		if (point->w != 0)
+		if (point->w != 0) {
 			velocity += get_point_effect(particle, point);
+		}
 	}
 
 	return velocity;

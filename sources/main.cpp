@@ -6,7 +6,7 @@ int main(void) {
 
     OGL_manager     glman;
     OCL_manager     clman;
-    GravityManager  gm;
+    GravityManager  gm(3);
 
     std::cout << glman << std::endl;
     std::cout << clman << std::endl;

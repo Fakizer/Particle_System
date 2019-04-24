@@ -1,5 +1,5 @@
-#ifndef KEYBOARD_HPP
-#define KEYBOARD_HPP
+#pragma once
+
 
 #define __gl3_h_
 #include <glew/glew.h>
@@ -7,24 +7,17 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 
-#include "PS_errors.hpp"
-#include "Window.hpp"
-
 class Keyboard
 {
 
 private:
-    
-    Window      win;
-
+    static bool        space_pressed;
 public:
-    Keyboard();
-    Keyboard(Window const & win);
+    // Keyboard();
+    // Keyboard(Window const & win);
     // Keyboard() = default;
-    ~Keyboard();
+    // ~Keyboard();
 
     static void    key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
     
 };
-
-#endif

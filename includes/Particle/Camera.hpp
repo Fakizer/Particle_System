@@ -1,6 +1,7 @@
 #ifndef CAMERA_HPP
 #define CAMERA_HPP
 
+#include <vector>
 // #include <glm/glm.hpp>
 // #include <glm/gtx/transform.hpp>
 // #include <glm/gtc/matrix_transform.hpp>
@@ -19,8 +20,7 @@
 class Camera
 {
 private:
-    int             height;
-    int             width;
+    glm::vec2       resolution;
     glm::mat4       matrix;
 
 
@@ -43,6 +43,7 @@ public:
     Camera();
     Camera(Window & win);
 
+    std::vector<glm::vec3>  getRay2Point(glm::vec2 point);
     void        apply_changes_camera();
     void        apply_changes_projec();
     void        reset();

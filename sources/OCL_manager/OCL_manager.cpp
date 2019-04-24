@@ -55,11 +55,12 @@ cl::Platform	OCL_manager::getPlatform(const std::string & defaultName) {
 
 	if (defaultName.empty())
 	{
-		platformID = promptChoice(
-			"Available OpenCL platforms on this computer:",
-			"Which platform do you want to use ? ",
-			choices
-		);
+		platformID = 0;
+		// platformID = promptChoice(
+		// 	"Available OpenCL platforms on this computer:",
+		// 	"Which platform do you want to use ? ",
+		// 	choices
+		// );
 	}
 	else
 	{
@@ -95,11 +96,13 @@ cl::Device		OCL_manager::getDevice(const cl::Platform & platform, const std::str
 
 	if (defaultName.empty())
 	{
-		deviceID = promptChoice(
-			"Available OpenCL platforms on this computer:",
-			"Which platform do you want to use ? ",
-			choices
-		);
+		// printf("-----\n");
+		deviceID = 1;
+		// deviceID = promptChoice(
+		// 	"Available OpenCL platforms on this computer:",
+		// 	"Which platform do you want to use ? ",
+		// 	choices
+		// );
 	}
 	else
 	{

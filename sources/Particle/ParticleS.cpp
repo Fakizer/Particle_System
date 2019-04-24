@@ -23,12 +23,13 @@ ParticleS::ParticleS(OGL_manager & glman_in, OCL_manager & clman_in, GravityMana
     camera(glman_in.window), 
     entries_count(1000000) {
     
+    glman.rend_func = [&](void *data){ render(); };
     setCLbuffers();
 
     create_camera();
     init();
 
-    glman.rend_func = [&](void *data){ render(); };
+	kernel = cl::Kernel(clman.program, "update_particles");
 }
 
 void        ParticleS::render() {
@@ -56,12 +57,12 @@ void        ParticleS::changePS() {
 
 		if (!_paused)
 		{
-			cl::Kernel	kernel(clman.program, "update_particles");
+			// cl::Kernel	kernel(clman.program, "update_particles");
 			kernel.setArg(0, clman.vbos[0]);
 			kernel.setArg(1, clman.vbos[1]);
 			kernel.setArg(2, sizeof(cl_float), &deltaTime);
 
-			glFinish();
+			// glFinish();
 
 			queue.enqueueAcquireGLObjects(&clman.vbos);
 			queue.enqueueNDRangeKernel(kernel, cl::NullRange, cl::NDRange(entries_count), cl::NullRange);
@@ -87,20 +88,21 @@ void		ParticleS::updateUniforms() const
 	const Point &	        gp = gm.points[0];
 	GLint					uniID;
 	const glm::mat4			mvp = camera.projection_mat * glm::inverse(camera.view_mat);
+	// const glm::mat4			mvp = camera.projection_mat * (camera.view_mat);
 
 
-	program = glman.programs.at("particle");
+	program = glman.programs["particle"];
 	program->prog_enable();
 	uniID = glGetUniformLocation(program->program_id, "gp");
-    printf("-------------\n");
+    // printf("-------------\n");
 	// glUniform4f(uniID, gp.s[0], gp.s[1], gp.s[2], gp.s[3]);
-	glUniform4f(uniID, 4, gp);
+	glUniform4fv(uniID, 4, gp.s);
 	uniID = glGetUniformLocation(program->program_id, "mvp");
 	glUniformMatrix4fv(uniID, 1, GL_FALSE, glm::value_ptr(mvp));
 	program->prog_disable();
 
-    printf("-------------\n");
-	program = glman.programs.at("gp");
+    // printf("-------------\n");
+	program = glman.programs["gp"];
 	program->prog_enable();
 	uniID = glGetUniformLocation(program->program_id, "mvp");
 	glUniformMatrix4fv(uniID, 1, GL_FALSE, glm::value_ptr(mvp));
@@ -110,6 +112,7 @@ void		ParticleS::updateUniforms() const
 void		ParticleS::init()
 {
     std::string initFunction("initialize_cube");
+    // std::string initFunction("initialize_sphere");
 
 	gm.freeAllPoints();
 
@@ -139,8 +142,6 @@ void        ParticleS::setCLbuffers() {
 
 	try
 	{
-		cl::BufferGL	clBuffer;
-
 		clman.vbos.push_back(cl::BufferGL(clman.context, CL_MEM_READ_WRITE, glman.vbo[0], nullptr));
 		clman.vbos.push_back(cl::BufferGL(clman.context, CL_MEM_READ_ONLY, glman.vbo[1], nullptr));
 	}

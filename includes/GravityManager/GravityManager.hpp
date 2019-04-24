@@ -1,7 +1,8 @@
 #pragma once
 
 #include "Point.hpp"
-// #include <vector>
+
+#include "Camera.hpp"
 
 class GravityManager
 {
@@ -12,6 +13,7 @@ public:
     GravityManager();
     GravityManager(unsigned int numb);
 
+    Point *     getDefaultPoint(glm::vec2 screenPoint);
     Point *     getFreePoint();
 
     bool		isPointFree(const Point & gp) const;
