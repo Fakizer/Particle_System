@@ -17,7 +17,8 @@ private:
     static bool        space_pressed;
     static unsigned int max_entries_count;
     static unsigned int min_entries_count;
-    static std::map<std::string, bool>  repeater;
+    static std::map<std::string, bool>  repeater_qweasd;
+    static std::map<std::string, bool>  repeater_arrows;
     struct KeyAction
     {
         int     front;
@@ -34,8 +35,11 @@ public:
     static void     key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
     static void     updateEntries_count(const int count, ParticleS & ps);
     static void     updateFigure(const std::string figure, ParticleS & ps);
-    static void     moveCamera(ParticleS & ps);
     static void     movement(int key, int action);
-    static void     movement_key_press(int key);
-    static void     movement_key_release(int key);
+    static void     moveCamera_QWEASD(ParticleS & ps);
+    static void     moveCamera_ARROWS(ParticleS & ps);
+    static void     movement_key_press_QWEASD(int key);
+    static void     movement_key_release_QWEASD(int key);
+    static void     movement_key_press_ARROWS(int key);
+    static void     movement_key_release_ARROWS(int key);
 };

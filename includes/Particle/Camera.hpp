@@ -27,9 +27,6 @@ private:
     glm::mat4       model_mat;
 
 	float   		initialFoV;
-    float           FoV;
-    float           verticalAngle;
-    float           horizontalAngle;
 
 
 	float	    	nearPlane;
@@ -41,6 +38,9 @@ private:
     glm::vec2       xyamount(int x, int y);
 
 public:
+    float           FoV;
+    float           verticalAngle;
+    float           horizontalAngle;
     float           aspectratio;
     glm::quat       quaternion;
     glm::mat4       projection_mat;
@@ -49,6 +49,7 @@ public:
 	glm::vec3		angularVelocity;
 
     float           speed;
+    float           arrows_speed;
     glm::vec3       camPos, camDir, curRayDir;
     glm::vec3       cu, cr, cf;
 

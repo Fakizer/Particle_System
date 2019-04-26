@@ -25,7 +25,7 @@ void                    Camera::initCamera() {
 
     speed = 3.0f; // 3 units / second
     
-    float mouseSpeed = 0.005f;
+    arrows_speed = 0.005f;
 
     cf = camDir = glm::vec3(
         cos(verticalAngle) * sin(horizontalAngle),
@@ -96,6 +96,20 @@ glm::vec2              Camera::xyamount(int x, int y) {
 
 
 void    Camera::apply_changes_camera() {
+
+    cf = camDir = glm::vec3(
+        cos(verticalAngle) * sin(horizontalAngle),
+        sin(verticalAngle),
+        cos(verticalAngle) * cos(horizontalAngle)
+    );
+
+    cr = glm::vec3(
+        sin(horizontalAngle - 3.14f/2.0f),
+        0,
+        cos(horizontalAngle - 3.14f/2.0f)
+    );
+
+    cu = glm::cross( cr, cf );
     
     projection_mat = glm::perspective(
         glm::radians(initialFoV), 
@@ -104,7 +118,7 @@ void    Camera::apply_changes_camera() {
 
     view_mat = glm::lookAt(
         camPos,           // Позиция камеры
-        camPos + camDir, // Направление камеры
+        camPos + cf, // Направление камеры
         cu                  // Вектор "Вверх" камеры
     );
 

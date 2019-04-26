@@ -8,14 +8,16 @@
 bool                Keyboard::space_pressed = false;
 unsigned int        Keyboard::max_entries_count = 1500000;
 unsigned int        Keyboard::min_entries_count = 0;
-std::map<std::string, bool>  Keyboard::repeater;
+std::map<std::string, bool>  Keyboard::repeater_qweasd;
+std::map<std::string, bool>  Keyboard::repeater_arrows;
 
 void    Keyboard::key_callback(GLFWwindow* window, int key, int scancode, int action, int mode) {
     std::cerr << "key_callback(" << window << ", " << key << ", " <<
         scancode << ", " << action << ", " << mode << ");" << std::endl;
     ParticleS & ps = ParticleS::instance();
     if (GLFW_RELEASE == action) {
-        movement_key_release(key);
+        movement_key_release_QWEASD(key);
+        movement_key_release_ARROWS(key);
     }
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, GL_TRUE);
@@ -59,55 +61,90 @@ void    Keyboard::key_callback(GLFWwindow* window, int key, int scancode, int ac
         ps.pause = !ps.pause;
     }
     movement(key, action);
-    moveCamera(ps);    
+    moveCamera_QWEASD(ps);
+    moveCamera_ARROWS(ps);
 }
 
 void    Keyboard::movement(int key, int action) {
-    if (action > 0)
-        movement_key_press(key);
-    if (action == 0)
-        movement_key_release(key);
-}
-
-void    Keyboard::movement_key_press(int key) {
-    if (key == GLFW_KEY_W) {
-        repeater["forward"] = true;
+    if (action > 0) {
+        movement_key_press_QWEASD(key);
+        movement_key_press_ARROWS(key);
     }
-    else if (key == GLFW_KEY_S) {
-        repeater["back"] = true;
-    }
-    else if (key == GLFW_KEY_D) {
-        repeater["right"] = true;
-    }
-    else if (key == GLFW_KEY_A) {
-        repeater["left"] = true;
-    }
-    else if (key == GLFW_KEY_Q) {
-        repeater["up"] = true;
-    }
-    else if (key == GLFW_KEY_E) {
-        repeater["down"] = true;
+    if (action == 0) {
+        movement_key_release_QWEASD(key);
+        movement_key_release_ARROWS(key);
     }
 }
 
-void    Keyboard::movement_key_release(int key) {
+void    Keyboard::movement_key_press_ARROWS(int key) {
+    if (key == GLFW_KEY_UP) {
+        repeater_arrows["up"] = true;
+    }
+    else if (key == GLFW_KEY_DOWN) {
+        repeater_arrows["down"] = true;
+    }
+    else if (key == GLFW_KEY_RIGHT) {
+        repeater_arrows["right"] = true;
+    }
+    else if (key == GLFW_KEY_LEFT) {
+        repeater_arrows["left"] = true;
+    }
+}
+
+void    Keyboard::movement_key_release_ARROWS(int key) {
+    if (key == GLFW_KEY_UP) {
+        repeater_arrows["up"] = false;
+    }
+    else if (key == GLFW_KEY_DOWN) {
+        repeater_arrows["down"] = false;
+    }
+    else if (key == GLFW_KEY_RIGHT) {
+        repeater_arrows["right"] = false;
+    }
+    else if (key == GLFW_KEY_LEFT) {
+        repeater_arrows["left"] = false;
+    }
+}
+
+void    Keyboard::movement_key_press_QWEASD(int key) {
     if (key == GLFW_KEY_W) {
-        repeater["forward"] = false;
+        repeater_qweasd["forward"] = true;
     }
     else if (key == GLFW_KEY_S) {
-        repeater["back"] = false;
+        repeater_qweasd["back"] = true;
     }
     else if (key == GLFW_KEY_D) {
-        repeater["right"] = false;
+        repeater_qweasd["right"] = true;
     }
     else if (key == GLFW_KEY_A) {
-        repeater["left"] = false;
+        repeater_qweasd["left"] = true;
     }
     else if (key == GLFW_KEY_Q) {
-        repeater["up"] = false;
+        repeater_qweasd["up"] = true;
     }
     else if (key == GLFW_KEY_E) {
-        repeater["down"] = false;
+        repeater_qweasd["down"] = true;
+    }
+}
+
+void    Keyboard::movement_key_release_QWEASD(int key) {
+    if (key == GLFW_KEY_W) {
+        repeater_qweasd["forward"] = false;
+    }
+    else if (key == GLFW_KEY_S) {
+        repeater_qweasd["back"] = false;
+    }
+    else if (key == GLFW_KEY_D) {
+        repeater_qweasd["right"] = false;
+    }
+    else if (key == GLFW_KEY_A) {
+        repeater_qweasd["left"] = false;
+    }
+    else if (key == GLFW_KEY_Q) {
+        repeater_qweasd["up"] = false;
+    }
+    else if (key == GLFW_KEY_E) {
+        repeater_qweasd["down"] = false;
     }
 }
 
@@ -130,33 +167,33 @@ void     Keyboard::updateFigure(const std::string figure, ParticleS & ps) {
     ps.updateParams();
 }
 
-void    Keyboard::moveCamera(ParticleS & ps) {
+void    Keyboard::moveCamera_QWEASD(ParticleS & ps) {
     static std::clock_t	lastTime = std::clock();
 	std::clock_t		newTime;
 	cl_float			deltaTime;
     glm::vec3           direction(0.0f);
 
-    if (repeater["forward"] == true) {
+    if (repeater_qweasd["forward"] == true) {
         direction = ps.camera.cf;
         ps.camera.camPos += direction * ps.camera.speed / FPS_manager::fps;
     }
-    if (repeater["back"] == true) {
+    else if (repeater_qweasd["back"] == true) {
         direction = -ps.camera.cf;
         ps.camera.camPos += direction * ps.camera.speed / FPS_manager::fps;
     }
-    if (repeater["right"] == true) {
+    else if (repeater_qweasd["right"] == true) {
         direction = ps.camera.cr;
         ps.camera.camPos += direction * ps.camera.speed / FPS_manager::fps;
     }
-    if (repeater["left"] == true) {
+    else if (repeater_qweasd["left"] == true) {
         direction = -ps.camera.cr;
         ps.camera.camPos += direction * ps.camera.speed / FPS_manager::fps;
     }
-    if (repeater["up"] == true) {
+    else if (repeater_qweasd["up"] == true) {
         direction = ps.camera.cu;
         ps.camera.camPos += direction * ps.camera.speed / FPS_manager::fps;
     }
-    if (repeater["down"] == true) {
+    else if (repeater_qweasd["down"] == true) {
         direction = -ps.camera.cu;
         ps.camera.camPos += direction * ps.camera.speed / FPS_manager::fps;
     }
@@ -167,4 +204,28 @@ void    Keyboard::moveCamera(ParticleS & ps) {
     // ps.camera.camPos += direction * ps.camera.speed / FPS_manager::fps;
 }
 
+void    Keyboard::moveCamera_ARROWS(ParticleS & ps) {
+    float dir = 0.0f;
+
+    if (repeater_arrows["right"] == true) {
+        dir = -1.0f;
+        ps.camera.horizontalAngle += ps.camera.arrows_speed  * dir;        
+    }
+    else if (repeater_arrows["left"] == true) {
+        dir = 1.0f;
+        ps.camera.horizontalAngle += ps.camera.arrows_speed  * dir;        
+    }
+    else if (repeater_arrows["up"] == true) {
+        dir = 1.0f;
+        ps.camera.verticalAngle   += ps.camera.arrows_speed  * dir;
+    }
+    else if (repeater_arrows["down"] == true) {
+        dir = -1.0f;
+        ps.camera.verticalAngle   += ps.camera.arrows_speed  * dir; 
+    }
+
+
+    // ps.camera.horizontalAngle += ps.camera.arrows_speed  * dir;
+    // ps.camera.verticalAngle   += ps.camera.arrows_speed  * dir;
+}
 // Keyboard::~Keyboard() {}
