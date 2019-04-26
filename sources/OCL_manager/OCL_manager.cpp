@@ -96,7 +96,6 @@ cl::Device		OCL_manager::getDevice(const cl::Platform & platform, const std::str
 
 	if (defaultName.empty())
 	{
-		// printf("-----\n");
 		deviceID = 1;
 		// deviceID = promptChoice(
 		// 	"Available OpenCL platforms on this computer:",

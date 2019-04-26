@@ -10,6 +10,6 @@ out	vec3	passPosition;
 
 void	main()
 {
-	gl_Position = vec4(inPosition.xyz, 1) * mvp;
+	gl_Position = mvp * vec4(inPosition.xyz, 1);
 	passPosition = inPosition.xyz;
 }

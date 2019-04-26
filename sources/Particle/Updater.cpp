@@ -10,6 +10,7 @@
 #include "Updater.hpp"
 #include "ParticleS.hpp"
 #include "FPS_manager.hpp"
+#include <string>
 
 void		Updater::update(const ParticleS & ps)
 {
@@ -49,11 +50,23 @@ void		Updater::updatePoints(const ParticleS & ps)
 void		Updater::updateWindowTitle(const ParticleS & ps)
 {
 	char	title[50];
+	std::string titles;
 	float	fps = FPS_manager::fps;
 
 	if (fps < 0)
 		return;
 
 	sprintf(title, "%i fps", static_cast<int>(fps));
-	glfwSetWindowTitle(ps.glman.window.win, title);
+	titles.append("pause: ");
+	if (ps.pause)
+		titles.append("true");
+	else
+		titles.append("false");
+	titles.append(" | particles count: ");
+	std::string entries_count_str(std::to_string(ps.entries_count));
+	titles.append(entries_count_str);
+	titles.append(" | fps: ");
+	std::string fps_str(std::to_string(static_cast<int>(fps)));
+	titles.append(fps_str);
+	glfwSetWindowTitle(ps.glman.window.win, titles.c_str());
 }

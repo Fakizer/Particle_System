@@ -9,7 +9,8 @@ SRC_PATH := ./sources/
 SRC_SUB_PATH :=	OCL_manager/ \
 				OGL_manager/ \
 				GravityManager/ \
-				Particle/
+				Particle/ \
+				Manipulates/
 OBJ_PATH := ./objects/
 LIB_PATH := ./library/
 INC_PATH := ./includes/ \

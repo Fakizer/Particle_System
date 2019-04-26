@@ -21,15 +21,20 @@ ParticleS::ParticleS(OGL_manager & glman_in, OCL_manager & clman_in, GravityMana
     clman(clman_in), 
     gm(gm_in), 
     camera(glman_in.window), 
-    entries_count(1000000) {
+    // entries_count(500000),
+    entries_count(1000000),
+	current_figure("initialize_cube") {
     
     glman.rend_func = [&](void *data){ render(); };
+
+	updateParams();
+
+	// kernel = cl::Kernel(clman.program, "update_particles");
+}
+
+void		ParticleS::updateParams() {
     setCLbuffers();
-
-    create_camera();
     init();
-
-	kernel = cl::Kernel(clman.program, "update_particles");
 }
 
 void        ParticleS::render() {
@@ -55,14 +60,14 @@ void        ParticleS::changePS() {
 		deltaTime = 1000.f * (newTime - lastTime) / CLOCKS_PER_SEC;
 		lastTime = newTime;
 
-		if (!_paused)
+		if (!pause)
 		{
-			// cl::Kernel	kernel(clman.program, "update_particles");
+			cl::Kernel	kernel(clman.program, "update_particles");
 			kernel.setArg(0, clman.vbos[0]);
 			kernel.setArg(1, clman.vbos[1]);
 			kernel.setArg(2, sizeof(cl_float), &deltaTime);
 
-			// glFinish();
+			glFinish();
 
 			queue.enqueueAcquireGLObjects(&clman.vbos);
 			queue.enqueueNDRangeKernel(kernel, cl::NullRange, cl::NDRange(entries_count), cl::NullRange);
@@ -82,26 +87,22 @@ void		ParticleS::updateGPBuffer() const {
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void		ParticleS::updateUniforms() const
-{
+void		ParticleS::updateUniforms() const {
 	const ShaderHandler *	program;
 	const Point &	        gp = gm.points[0];
 	GLint					uniID;
-	const glm::mat4			mvp = camera.projection_mat * glm::inverse(camera.view_mat);
+	const glm::mat4			mvp = camera.projection_mat * camera.view_mat * glm::mat4(1.0f);
 	// const glm::mat4			mvp = camera.projection_mat * (camera.view_mat);
 
 
 	program = glman.programs["particle"];
 	program->prog_enable();
 	uniID = glGetUniformLocation(program->program_id, "gp");
-    // printf("-------------\n");
-	// glUniform4f(uniID, gp.s[0], gp.s[1], gp.s[2], gp.s[3]);
 	glUniform4fv(uniID, 4, gp.s);
 	uniID = glGetUniformLocation(program->program_id, "mvp");
 	glUniformMatrix4fv(uniID, 1, GL_FALSE, glm::value_ptr(mvp));
 	program->prog_disable();
 
-    // printf("-------------\n");
 	program = glman.programs["gp"];
 	program->prog_enable();
 	uniID = glGetUniformLocation(program->program_id, "mvp");
@@ -109,17 +110,24 @@ void		ParticleS::updateUniforms() const
 	program->prog_disable();
 }
 
-void		ParticleS::init()
-{
-    std::string initFunction("initialize_cube");
-    // std::string initFunction("initialize_sphere");
+void		ParticleS::init() {
+	if (current_figure == std::string("initialize_cube") && !entries_count_changed)
+    	return ;
+	else if (current_figure == std::string("initialize_sphere") && !entries_count_changed)
+    	return ;
 
+	// if (current_figure == std::string("initialize_cube"))
+    // 	return ;
+	// else if (current_figure == std::string("initialize_sphere"))
+    // 	return ;
+
+	entries_count_changed = !entries_count_changed;
 	gm.freeAllPoints();
 
 	try
 	{
 		cl::CommandQueue &	queue = clman.queue;
-		cl::Kernel			kernel(clman.program, initFunction.c_str());
+		cl::Kernel			kernel(clman.program, current_figure.c_str());
 
 		kernel.setArg(0, clman.vbos[0]);
 		kernel.setArg(1, sizeof(cl_uint), &entries_count);
@@ -190,14 +198,6 @@ void		ParticleS::setupGPBuffer()
 	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(Point), nullptr);
 
 	glBindVertexArray(0);
-}
-
-void		ParticleS::create_camera() {
-    camera.view_mat = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 1.735f));
-	camera.linearVelocity = glm::vec3(0.0f);
-	camera.angularVelocity = glm::vec3(0.0f);
-	camera.quaternion = glm::quat(1, 1, 1, 1);
-	camera.aspectratio = glman.window.current_win_w / glman.window.current_win_h;
 }
 
 ParticleS::~ParticleS() {

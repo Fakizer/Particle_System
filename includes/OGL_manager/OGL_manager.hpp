@@ -7,6 +7,7 @@
 #include "Window.hpp"
 #include "PS_errors.hpp"
 #include "Keyboard.hpp"
+#include "Mouse.hpp"
 #include "ShaderHandler.hpp"
 
 class ShaderHandler;
@@ -36,6 +37,7 @@ public:
     OGL_manager();
     ~OGL_manager();
 
+    Mouse       mouse;
     Keyboard    keyboard;
     Window      window;
     

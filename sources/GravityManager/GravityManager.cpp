@@ -13,24 +13,27 @@ GravityManager::GravityManager(unsigned int numb) : gpNumb(numb) {
 
 Point *		GravityManager::getDefaultPoint(glm::vec2 screenPoint) {
 	Point * point = getFreePoint();
-
+	printf("%f, %f\n\n", screenPoint.x, screenPoint.y);
 	if (point != nullptr) {
 		Camera & camera = ParticleS::instance().camera;
 
 		std::vector<glm::vec3> ray = camera.getRay2Point(screenPoint);
+		printf("%f, %f, %f\n", ray[0].x, ray[0].y, ray[0].z);
+		printf("%f, %f, %f\n", ray[1].x, ray[1].y, ray[1].z);
+		glm::vec3 planeNormal = glm::vec3(0,0,-1.0f);
+		glm::vec3 planePosition(0.0f);
 
-		glm::vec3 planeNormal = camera.quaternion * glm::vec3(0,0,-1.0f);
-		glm::vec3 planePosition(0);
+		float	distance = -1.f * glm::dot((ray[0] - planePosition), planeNormal) / glm::dot(ray[1], planeNormal);
 
-		float	distance = glm::dot(planeNormal, (planePosition - ray[0])) / glm::dot(planeNormal, ray[1]);
+		glm::vec3 position = ray[0] + (ray[1] * distance);
 
-		glm::vec3 position = ray[0] + ray[1] * distance;
-
+		printf("%f, %f, %f\n", position.x, position.y, position.z);
 		point->s[0] = position.x;
 		point->s[1] = position.y;
 		point->s[2] = position.z;
 		point->s[3] = 1.0f;
 	}
+	printf("------------------------\n");
 	return point;
 }
 

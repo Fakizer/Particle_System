@@ -11,6 +11,9 @@ OGL_manager::OGL_manager() : window() {
         exit(0);
 
     glfwSetKeyCallback(window.win, keyboard.key_callback);
+    glfwSetMouseButtonCallback(window.win, mouse.mouse_click_callback);
+	glfwSetCursorPosCallback(window.win, mouse.mouse_move_callback);
+	// glfwSetWindowSizeCallback(window.win, GLContext::resizeWindow);
     createPrograms();
     createVO();
 }
@@ -78,6 +81,7 @@ void    OGL_manager::createVO() {
 void    OGL_manager::rend_img_win(void * prog) {
     while (!glfwWindowShouldClose(window.win))
 	{
+        
         if (prog != nullptr)
             rend_func(prog);
 		// glClearColor(0.09f, 0.08f, 0.15f, 1.0f);

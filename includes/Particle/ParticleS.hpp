@@ -37,20 +37,23 @@ private:
     void        setupGPBuffer();
     void		updateGPBuffer() const;
     void        updateUniforms() const;
-    void        create_camera();
-    void        init();
+    void        init() ;
+    void        changePS() ;
 
-   	bool			_paused = false;
 
     ParticleS( OGL_manager & glman_in, OCL_manager & clman_in, GravityManager & gm_in);
     ~ParticleS();
 
 public:
+   	bool			pause = true;
+    bool            is_cube = false;
+    bool            entries_count_changed = true;
+    std::string     current_figure;
 
     static ParticleS &	 instance(OGL_manager * glman_in = nullptr, OCL_manager * clman_in = nullptr, GravityManager * gm_in = nullptr);
 
+    void        updateParams();
     void        render();
-    void        changePS();
 
     OGL_manager & glman;
     OCL_manager & clman;

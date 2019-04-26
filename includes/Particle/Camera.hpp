@@ -23,12 +23,22 @@ private:
     glm::vec2       resolution;
     glm::mat4       matrix;
 
-
+    int             width, height;
     glm::mat4       model_mat;
 
-	float   		fovY;
+	float   		initialFoV;
+    float           FoV;
+    float           verticalAngle;
+    float           horizontalAngle;
+
+
 	float	    	nearPlane;
 	float		    farPlane;
+    float           xamnt, yamnt;
+
+
+    void            initCamera();
+    glm::vec2       xyamount(int x, int y);
 
 public:
     float           aspectratio;
@@ -38,6 +48,9 @@ public:
     glm::vec3		linearVelocity;
 	glm::vec3		angularVelocity;
 
+    float           speed;
+    glm::vec3       camPos, camDir, curRayDir;
+    glm::vec3       cu, cr, cf;
 
 
     Camera();
