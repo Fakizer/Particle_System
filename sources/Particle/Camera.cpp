@@ -11,12 +11,11 @@ Camera::Camera(Window & win) :
 
     initCamera();
     aspectratio = resolution.x / resolution.y ;
-    apply_changes_projec();
 }
 
 void                    Camera::initCamera() {
 
-    camPos = glm::vec3(0, 0, 5);
+    camPos = glm::vec3(0, 0, 2);
 
     horizontalAngle = 3.14f;
     verticalAngle = 0.0f;
@@ -25,7 +24,9 @@ void                    Camera::initCamera() {
 
     speed = 3.0f; // 3 units / second
     
-    arrows_speed = 0.005f;
+    // arrows_speed = 0.005f;
+    arrows_speed = 0.01f;
+
 
     cf = camDir = glm::vec3(
         cos(verticalAngle) * sin(horizontalAngle),
@@ -63,8 +64,8 @@ std::vector<glm::vec3>      Camera::getRay2Point(glm::vec2 point) {
 
     glm::vec2	renderPlaneSize;
     
-	renderPlaneSize.y = tan(initialFoV / 2.f) * nearPlane;
-	renderPlaneSize.x = renderPlaneSize.y * aspectratio;
+	// renderPlaneSize.y = tan(initialFoV / 2.f) * nearPlane;
+	// renderPlaneSize.x = renderPlaneSize.y * aspectratio;
 
     curRayDir = -cf + (cu * (xyamnt.x - 0.5f)) + (-cr * (xyamnt.y - 0.5f));
 
@@ -96,6 +97,8 @@ glm::vec2              Camera::xyamount(int x, int y) {
 
 
 void    Camera::apply_changes_camera() {
+    moveCamera_QWEASD();
+    moveCamera_ARROWS();
 
     cf = camDir = glm::vec3(
         cos(verticalAngle) * sin(horizontalAngle),
@@ -124,8 +127,66 @@ void    Camera::apply_changes_camera() {
 
 }
 
-void   Camera::apply_changes_projec() {
-    projection_mat = glm::perspective(initialFoV, aspectratio, nearPlane, farPlane);
+void    Camera::moveCamera_QWEASD() {
+    // static std::clock_t	lastTime = std::clock();
+	// std::clock_t		newTime;
+	// cl_float			deltaTime;
+    glm::vec3           direction(0.0f);
+
+    if (Keyboard::repeater_qweasd["forward"] == true) {
+        direction = cf;
+        camPos += direction * (speed / FPS_manager::fps);
+    }
+    if (Keyboard::repeater_qweasd["back"] == true) {
+        direction = -cf;
+        camPos += direction * (speed / FPS_manager::fps);
+    }
+    if (Keyboard::repeater_qweasd["right"] == true) {
+        direction = cr;
+        camPos += direction * (speed / FPS_manager::fps);
+    }
+    if (Keyboard::repeater_qweasd["left"] == true) {
+        direction = -cr;
+        camPos += direction * (speed / FPS_manager::fps);
+    }
+    if (Keyboard::repeater_qweasd["up"] == true) {
+        direction = cu;
+        camPos += direction * (speed / FPS_manager::fps);
+    }
+    if (Keyboard::repeater_qweasd["down"] == true) {
+        direction = -cu;
+        camPos += direction * (speed / FPS_manager::fps);
+    }
+    
+    // newTime = std::clock();
+    // deltaTime = 1000.f * (newTime - lastTime) / CLOCKS_PER_SEC;
+    // lastTime = newTime;
+    // camPos += direction * speed / FPS_manager::fps;
+}
+
+void    Camera::moveCamera_ARROWS() {
+    float dir = 0.0f;
+
+    if (Keyboard::repeater_arrows["right"] == true) {
+        dir = -1.0f;
+        horizontalAngle += arrows_speed  * dir;        
+    }
+    if (Keyboard::repeater_arrows["left"] == true) {
+        dir = 1.0f;
+        horizontalAngle += arrows_speed  * dir;        
+    }
+    if (Keyboard::repeater_arrows["up"] == true) {
+        dir = 1.0f;
+        verticalAngle   += arrows_speed  * dir;
+    }
+    if (Keyboard::repeater_arrows["down"] == true) {
+        dir = -1.0f;
+        verticalAngle   += arrows_speed  * dir; 
+    }
+
+
+    // horizontalAngle += arrows_speed  * dir;
+    // verticalAngle   += arrows_speed  * dir;
 }
 
 void    Camera::reset() {

@@ -35,8 +35,10 @@ private:
     void        setCLbuffers();
     void        setupPartBuffer();
     void        setupGPBuffer();
+    void        setupFontBuffer();
     void		updateGPBuffer() const;
     void        updateUniforms() const;
+    void        updateFonts() const;
     void        init() ;
     void        changePS() ;
 

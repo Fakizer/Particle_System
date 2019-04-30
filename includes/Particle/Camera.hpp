@@ -16,6 +16,8 @@
 #include <glm/gtc/constants.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "Window.hpp"
+#include "Keyboard.hpp"
+#include "FPS_manager.hpp"
 
 class Camera
 {
@@ -32,6 +34,7 @@ private:
 	float	    	nearPlane;
 	float		    farPlane;
     float           xamnt, yamnt;
+    float           fps_camera;
 
 
     void            initCamera();
@@ -58,8 +61,9 @@ public:
     Camera(Window & win);
 
     std::vector<glm::vec3>  getRay2Point(glm::vec2 point);
+    void                    moveCamera_QWEASD();
+    void                    moveCamera_ARROWS();
     void        apply_changes_camera();
-    void        apply_changes_projec();
     void        reset();
     ~Camera();
 };

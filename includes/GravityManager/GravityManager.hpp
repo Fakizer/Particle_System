@@ -13,7 +13,9 @@ public:
     GravityManager();
     GravityManager(unsigned int numb);
 
-    Point *     getDefaultPoint(glm::vec2 screenPoint);
+    Point *     getDefaultPoint();
+    Point *     getPointInPos(glm::vec2 screenPoint);
+    Point *     getPointInPosFM(glm::vec2 screenPoint);
     Point *     getFreePoint();
 
     bool		isPointFree(const Point & gp) const;

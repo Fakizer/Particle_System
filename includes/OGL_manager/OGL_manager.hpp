@@ -47,7 +47,9 @@ public:
 
     std::map<std::string, ShaderHandler *>	programs;
 
-    std::vector<GLuint>     vbo; // 0 - particle 1 - gp
+    GLuint      texture[1];
+
+    std::vector<GLuint>     vbo; // 0 - particle 1 - gp 2 - font
     std::vector<GLuint>     vao;
 };
 

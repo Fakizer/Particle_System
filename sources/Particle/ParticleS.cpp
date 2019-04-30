@@ -41,6 +41,7 @@ void        ParticleS::render() {
     changePS();
     camera.apply_changes_camera();
     updateUniforms();
+	updateFonts();
     Updater::update(*this);
 }
 
@@ -110,6 +111,10 @@ void		ParticleS::updateUniforms() const {
 	program->prog_disable();
 }
 
+void		ParticleS::updateFonts() const {
+	
+}
+
 void		ParticleS::init() {
 	if (current_figure == std::string("initialize_cube") && !entries_count_changed)
     	return ;
@@ -147,6 +152,7 @@ void		ParticleS::init() {
 void        ParticleS::setCLbuffers() {
     setupPartBuffer();
 	setupGPBuffer();
+	setupFontBuffer();
 
 	try
 	{
@@ -198,6 +204,20 @@ void		ParticleS::setupGPBuffer()
 	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(Point), nullptr);
 
 	glBindVertexArray(0);
+}
+
+void		ParticleS::setupFontBuffer() {
+	// GLuint	size = sizeof(Point) * gm.gpNumb;
+	GLuint	vbo = glman.vbo[2];
+	GLuint	vao = glman.vao[2];
+
+	glBindVertexArray(vao);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4*sizeof(GLfloat),
+						NULL);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4*sizeof(GLfloat),
+						(const void*)(2*sizeof(GLfloat)));
 }
 
 ParticleS::~ParticleS() {

@@ -5,6 +5,7 @@
 #define GLFW_DLL
 #include <GLFW/glfw3.h>
 #include <iostream>
+#include "Camera.hpp"
 
 class ParticleS;
 
@@ -15,6 +16,7 @@ private:
 public:
 
     static bool     mouse_enable;
+    static glm::vec2 current_pos;
 
 
     static void     mouse_click_callback(GLFWwindow * window, int button, int action, int _);

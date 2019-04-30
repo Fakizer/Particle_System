@@ -32,7 +32,7 @@ bool    OGL_manager::initGLFW() {
 }
 
 bool    OGL_manager::initWindow() {
-    window.win = glfwCreateWindow(window.current_win_w, window.current_win_h, "Hello World", nullptr, nullptr);
+    window.win = glfwCreateWindow(window.current_win_w, window.current_win_h, "Partical System", nullptr, nullptr);
 
     if (window.win == NULL) {
         throw PS_errors::Win_init();
@@ -63,19 +63,27 @@ void    OGL_manager::createPrograms() {
     Shader gp_v(GL_VERTEX_SHADER, "shader/gp_vertex.glsl");
     Shader gp_f(GL_FRAGMENT_SHADER, "shader/gp_fragment.glsl");
     programs["gp"] = new ShaderHandler({&gp_v, &gp_f});
+
+    Shader font_v(GL_VERTEX_SHADER, "shader/font_vertex.glsl");
+    Shader font_f(GL_FRAGMENT_SHADER, "shader/font_fragment.glsl");
+    programs["font"] = new ShaderHandler({&font_v, &font_f});
 }
 
 void    OGL_manager::createVO() {
-    GLuint	vbos[2];
-	GLuint	vaos[2];
+    GLuint	vbos[3];
+	GLuint	vaos[3];
 
-	glGenBuffers(2, vbos);
+	glGenBuffers(3, vbos);
 	vbo.push_back(vbos[0]);
     vbo.push_back(vbos[1]);
+    vbo.push_back(vbos[2]);
 
-	glGenVertexArrays(2, vaos);
+	glGenVertexArrays(3, vaos);
 	vao.push_back(vaos[0]);
     vao.push_back(vaos[1]);
+    vao.push_back(vaos[2]);
+
+    glGenTextures(1, texture);
 }
 
 void    OGL_manager::rend_img_win(void * prog) {
